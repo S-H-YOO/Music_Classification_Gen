@@ -1,0 +1,26 @@
+model = tf.keras.Sequential()
+ model.add(tf.keras.layers.Dense(1024, activation='relu', input_shape=(58, )))
+ model.add(tf.keras.layers.Dropout(0.5))
+ model.add(BatchNormalization())
+ model.add(tf.keras.layers.Dense(1024, activation='relu'))
+- 23 
+2) 멜로디 생성 모델
+model.add(tf.keras.layers.Dropout(0.5))
+ model.add(BatchNormalization())
+ model.add(tf.keras.layers.Dense(512, activation='relu'))
+ model.add(tf.keras.layers.Dropout(0.5))
+ model.add(BatchNormalization())
+ model.add(tf.keras.layers.Dense(128, activation='relu'))
+ model.add(tf.keras.layers.Dropout(0.5))
+ model.add(BatchNormalization())
+ model.add(tf.keras.layers.Dense(10, activation='softmax'))
+
+# 옵티마이저 값 설정
+Adam = tf.keras.optimizers.Adam(learning_rate=0.0003, beta_1=0.9, beta_2=0.999, epsilon = 1e-08)
+ # 모델 컴파일
+model.compile(optimizer=Adam, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+ reduceLROnPlat = ReduceLROnPlateau(monitor = 'val_loss', factor = 0.895, patience = 3, verbose = 1, 
+    mode = 'min', min_delta = 0.0001, cooldown = 2, min_lr = 1e-5)
+ # 모델 훈련
+history = model.fit(train_scaled30, y_train, epochs=150, batch_size=32, #64
+                        validation_split=0.2, callbacks=[reduceLROnPlat])
