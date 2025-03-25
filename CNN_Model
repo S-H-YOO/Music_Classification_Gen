@@ -1,0 +1,10 @@
+model.compile(loss = tf.keras.losses.categorical_crossentropy,
+              optimizer = tf.keras.optimizers.Adam(),
+              metrics = ['accuracy'])
+ reduceLROnPlat = ReduceLROnPlateau(monitor = 'val_loss', factor = 0.895, patience = 3, verbose = 1,
+    mode = 'min', min_delta = 0.0001, cooldown = 2, min_lr = 1e-5)
+ batch_size = 32
+ steps_per_epoch = np.ceil(len(x_train)/batch_size)
+ history = model.fit(x_train, y_train, batch_size=32, validation_split = 0.2, epochs=150, verbose=1,
+    callbacks=[reduceLROnPlat])
+ model.save('/content/drive/MyDrive/deep24_model/cnn_best.h5')
